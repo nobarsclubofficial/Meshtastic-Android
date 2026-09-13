@@ -18,6 +18,7 @@ package org.meshtastic.feature.settings
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,8 +28,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -41,6 +44,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -84,8 +89,8 @@ private val CAROUSEL_IMAGE_WIDTH = 110.dp
 private val CAROUSEL_IMAGE_HEIGHT = 130.dp
 
 private const val HARDWARE_URL = "https://meshtastic.org/#hardware"
-private const val GITHUB_REPO_URL = "https://github.com/meshtastic/Meshtastic-Android"
-private const val WEBSITE_URL = "https://meshtastic.org"
+private const val GITHUB_REPO_URL = "https://github.com/nobarsclubofficial/Meshtastic-Android"
+private const val WEBSITE_URL = "https://www.nobarsclub.com"
 private const val DOCS_URL = "https://meshtastic.org/docs/getting-started"
 
 private data class PopularDevice(val name: String, val svgFileName: String)
@@ -101,10 +106,6 @@ private val POPULAR_DEVICES =
         PopularDevice(name = "ThinkNode M1", svgFileName = "thinknode_m1.svg"),
     )
 
-/**
- * About screen displaying general information about Meshtastic, hardware recommendations, repository and version
- * details, acknowledgements, and project links.
- */
 @Composable
 fun AboutScreen(
     appVersionName: String,
@@ -136,6 +137,7 @@ fun AboutScreen(
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            NoBarsBrandHeader(onOpenWebsite = { uriHandler.openUri(WEBSITE_URL) })
             WhatIsMeshtasticSection()
             AppsSection(
                 appVersionName = appVersionName,
@@ -149,6 +151,74 @@ fun AboutScreen(
             )
             CopyrightFooter()
         }
+    }
+}
+
+@Composable
+private fun NoBarsBrandHeader(onOpenWebsite: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(24.dp))
+                .clickable(onClick = onOpenWebsite)
+                .padding(horizontal = 20.dp, vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        NoBarsMark()
+        Text(
+            text = "NO BARS CONNECT",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Black,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = "A No Bars Club build of Meshtastic",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = "No towers. No bars. No problem.",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = "nobarsclub.com",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+private fun NoBarsMark(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.size(76.dp), contentAlignment = Alignment.Center) {
+        Row(
+            modifier = Modifier.height(42.dp),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalAlignment = Alignment.Bottom,
+        ) {
+            listOf(14.dp, 22.dp, 30.dp, 38.dp).forEach { height ->
+                Box(
+                    modifier =
+                        Modifier.width(7.dp)
+                            .height(height)
+                            .background(MaterialTheme.colorScheme.onSurface, RoundedCornerShape(3.dp)),
+                )
+            }
+        }
+        Box(
+            modifier =
+                Modifier.width(58.dp)
+                    .height(7.dp)
+                    .graphicsLayer { rotationZ = -45f }
+                    .background(Color(0xFFE53935), RoundedCornerShape(4.dp)),
+        )
     }
 }
 
@@ -175,7 +245,7 @@ private fun AppsSection(
     ExpressiveSection(title = stringResource(Res.string.apps), modifier = modifier) {
         NeedHardwareRow(onOpenHardwareLink = onOpenHardwareLink)
         ListItem(
-            text = stringResource(Res.string.github_repository),
+            text = "No Bars Connect source",
             leadingIcon = MeshtasticIcons.Code,
             trailingIcon = MeshtasticIcons.ChevronRight,
             onClick = onOpenRepoLink,
@@ -203,7 +273,7 @@ private fun ProjectInformationSection(
 ) {
     ExpressiveSection(title = stringResource(Res.string.project_information), modifier = modifier) {
         ListItem(
-            text = stringResource(Res.string.website),
+            text = "No Bars Club website",
             leadingIcon = MeshtasticIcons.Language,
             trailingIcon = MeshtasticIcons.ChevronRight,
             onClick = onOpenWebsite,
@@ -213,6 +283,12 @@ private fun ProjectInformationSection(
             leadingIcon = MeshtasticIcons.HelpOutline,
             trailingIcon = MeshtasticIcons.ChevronRight,
             onClick = onOpenDocs,
+        )
+        Text(
+            text = "No Bars Connect is an independent community build based on Meshtastic. Meshtastic remains credited to its upstream project and contributors.",
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -281,5 +357,5 @@ private fun NeedHardwareRow(onOpenHardwareLink: () -> Unit, modifier: Modifier =
 @Preview
 @Composable
 private fun AboutScreenPreview() {
-    AppTheme { AboutScreen(appVersionName = "2.5.0", onNavigateUp = {}, onNavigateToAcknowledgements = {}) }
+    AppTheme { AboutScreen(appVersionName = "2.8.0-nbc", onNavigateUp = {}, onNavigateToAcknowledgements = {}) }
 }
