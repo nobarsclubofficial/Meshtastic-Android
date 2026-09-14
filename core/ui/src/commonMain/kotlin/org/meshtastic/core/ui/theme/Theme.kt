@@ -121,7 +121,7 @@ val unspecified_scheme = ColorFamily(Color.Unspecified, Color.Unspecified, Color
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content:
     @Composable()
     () -> Unit,

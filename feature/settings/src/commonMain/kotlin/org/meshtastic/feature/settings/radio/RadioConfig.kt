@@ -57,7 +57,6 @@ import org.meshtastic.core.resources.nodedb_reset
 import org.meshtastic.core.resources.reboot
 import org.meshtastic.core.resources.set_time
 import org.meshtastic.core.resources.shutdown
-import org.meshtastic.core.resources.tak_server
 import org.meshtastic.core.ui.component.ListItem
 import org.meshtastic.core.ui.icon.AdminPanelSettings
 import org.meshtastic.core.ui.icon.AppSettingsAlt
@@ -201,8 +200,10 @@ private fun AdvancedSection(isManaged: Boolean, isOtaCapable: Boolean, enabled: 
         )
 
         ListItem(
-            text = stringResource(Res.string.tak_server),
+            text = "TAK Hub",
+            supportingText = "ATAK integration, local server, Mesh to CoT, channel and data package export",
             leadingIcon = MeshtasticIcons.Settings,
+            trailingIcon = MeshtasticIcons.ChevronRight,
             enabled = enabled,
             onClick = { onNavigate(SettingsRoute.TakServer) },
         )
